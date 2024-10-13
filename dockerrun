@@ -1,0 +1,3 @@
+#!/usr/bin/bash
+mkdir out 2>/dev/null
+docker run --rm -it --name cherry2md -v "${PWD}:/in" -v "${PWD}/out:/out" cherry2md

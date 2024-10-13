@@ -21,9 +21,15 @@ class CherryToMD {
     public function __construct(RenderConfig $config) {
         $this->renderConfig=$config;
         $outputDir=$config->getOutputPath();
-        mkdir($outputDir);
-        mkdir("$outputDir/images");
-        mkdir("$outputDir/files");
+        if (!file_exists($outputDir)) {
+          mkdir($outputDir);
+        }
+        if (!file_exists("$outputDir/images")) {
+          mkdir("$outputDir/images");
+        }
+        if (!file_exists("$outputDir/files")) {
+          mkdir("$outputDir/files");
+        }
         copy(__DIR__."/ct_anchor.png", "$outputDir/images/anchor.png");
     }
 

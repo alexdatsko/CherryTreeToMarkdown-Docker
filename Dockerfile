@@ -13,7 +13,7 @@ RUN echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" | tee /etc
  && apt install -y php8.0 php8.0-mbstring php8.0-xml php8.0-exif
 
 RUN cd /root \
- && git clone https://gitlab.com/kibley/cherrytreetomarkdown \
+ && git clone https://github.com/alexdatsko/CherryTreeToMarkdown-Docker.git \
  && cd /root/cherrytreetomarkdown/ \
  && php composer.phar install
 
@@ -23,8 +23,8 @@ RUN apt install -y python3-pip \
  && cd /root/cherrytreetomarkdown \
  && pip install -r requirements.txt --break-system-packages
 
-VOLUME /root/cherrytreetomarkdown/volumes/output
-VOLUME /root/cherrytreetomarkdown/volumes/input
+VOLUME /out
+VOLUME /in
 WORKDIR /root/cherrytreetomarkdown
 
 ENTRYPOINT bash
