@@ -2,13 +2,18 @@
 
 ## Update 10-13-2024 Alex Datsko:
 
-- Added in original php repo
+- Added in original php repo for converting to one large file, both options can run in the same docker.
 - Also: added support for src/element/Node.php for errors, so a very large .CTD with errors will still continue the conversion and print the errored nodes to the screen.
+- Shortened the paths you need to type in the docker exec, no reason for these long paths IMO
 
-### Original README:
+Note: If your cherrytree file is an SQLite type (.ctb) and/or password-protected, you will need to save it as a non-password protected XML instead first (.ctd).
+
+## About
 
 This is a quick and dirty Docker wrapper for [CherryTreeToMarkdown](https://gitlab.com/kibley/cherrytreetomarkdown).
 It allows you to convert your CherryTree files to Markdown without installing all the dependencies on your host.
+The first (PHP) script will convert the file to one large .MD file.
+The second (Python) script will create many directories and convert every node in the file to its own .MD file.
 
 ## Installation
 
@@ -18,7 +23,8 @@ $ cd CherryTreeToMarkdown-Docker
 $ docker build -t cherry2md .
 ~~~
 
-## Usage
+## Usage: One large .MD file
+## Kibley script: 11-04-2021
 
 ~~~ bash
 $ ls -alh input/
@@ -32,11 +38,11 @@ total 168K
 drwxr-xr-x 4 user user 4.0K Jul 25 14:58 .
 drwxr-xr-x 4 user user 4.0K Jul 25 15:01 ..
 
-$ docker run --rm -it --name cherry2md -v "${PWD}/input:/root/cherrytreetomarkdown/volumes/input" -v "${PWD}/output:/root/cherrytreetomarkdown/volumes/output" cherry2md
+$ docker run --rm -it --name cherry2md -v "${PWD}/input:/in" -v "${PWD}/output:/out" cherry2md
 
-root@76eaa5863875:~/cherrytreetomarkdown# php cherrytomd.php ./volumes/input/MyCherryTreeNotes.ctd ./volumes/output/MyCherryTreeNotes/
+root@76eaa5863875:~/cherrytreetomarkdown# php cherrytomd.php /in/MyCherryTreeNotes.ctd /out
 
-$ ls -alh output/MyCherryTreeNotes/
+$ ls -alh out/
 total 168K
 drwxr-xr-x 4 root root 4.0K Jul 25 15:11 .
 drwxr-xr-x 5 user user 4.0K Jul 25 15:11 ..
@@ -45,23 +51,13 @@ drwxr-xr-x 2 root root 4.0K Jul 25 15:11 images
 -rw-r--r-- 1 root root 151K Jul 25 15:11 index.md
 ~~~
 
-**Please Note:** If you get warnings like the following, you can safely ignore them:
+## Usage: Many .MD files:
+## ret2src script : 07-28-2023
 
-> PHP Warning:  mkdir(): File exists in /root/cherrytreetomarkdown/src/logic/CherryToMD.php on line 24
+This will instead create a new MD file for each node which is MUCH better for large CTD files, in converting your Cherrytree knowledgebase to be used with Obsidian, etc:
 
-## Recommendation: Automatically Split CherryTree Knowledge Base Into Individual Files
-
-As of 2023-07-28, the conversion tool provided at <https://gitlab.com/kibley/cherrytreetomarkdown> does not support splitting the input file into multiple output files; all content of your CherryTree knowledge base will be written to a single `index.md` file.
-
-If you have a large knowledge base (maybe even sorted in a hierarchical fashion), this is not ideal.
-To circumvent this limitation, we've added the script `splitconvert.py`, which first splits a CherryTree XML file into individual nodes and then uses the original conversion tool to convert each of these nodes to Markdown. While there are some file movement and renaming tasks involved, the whole process is fully transparent to the user and all you'll see are the final Markdown files — sorted into folders just like you had them in CherryTree.
-
-You can use this more advanced version of the conversion process as shown below.
-
-~~~ bash
-$ docker run --rm -it --name cherry2md -v "${PWD}:/root/cherrytreetomarkdown/volumes/input" -v "${PWD}:/root/cherrytreetomarkdown/volumes/output" cherry2md
-
-root@a32456004b2f:~/cherrytreetomarkdown# ./splitconvert.py -i volumes/input/MyCherryTreeKnowledgeBase.ctd -o volumes/output/MyConvertedKnowledgeBase
+~~~
+root@a32456004b2f:~/cherrytreetomarkdown# ./splitconvert.py -i /in -o /out
 [*] Starting node to individual file conversion.
 [*] Node to file conversion: All done.
 [*] Starting XML to Markdown conversion.
@@ -72,7 +68,7 @@ PHP Warning:  mkdir(): File exists in /root/cherrytreetomarkdown/src/logic/Cherr
 [*] Fixed image and file paths!
 ~~~
 
-~~~ bash
+~~~
 root@a32456004b2f:~/cherrytreetomarkdown# ./splitconvert.py -h
 usage: splitconvert.py [-h] [-v] -i INPUT [-o OUTPUT] [-k]
 
