@@ -68,10 +68,18 @@ def convert_ctd_files_to_md(input_path):
             subprocess.call(["php", "cherrytomd.php", Path(ctd_file), Path(tempdir_path)])
 
             # Copy the generated files and folders to the same location as the individual CherryTree files
-            shutil.copy(Path(tempdir_path, "index.md"), Path(current_parent_dir, current_basename.replace('.ctd', '.md')))
-            shutil.copytree(Path(tempdir_path, "files"), Path(current_parent_dir, "_attachments/files/"), dirs_exist_ok=True) 
-            shutil.copytree(Path(tempdir_path, "images"), Path(current_parent_dir, "_attachments/images/"), dirs_exist_ok=True) 
-
+            try:
+                shutil.copy(Path(tempdir_path, "index.md"), Path(current_parent_dir, current_basename.replace('.ctd', '.md')))
+            except:
+                print("something failed: shutil.copy index.md {temppath_dir} {current_parent_dir}")
+            try:
+                shutil.copytree(Path(tempdir_path, "files"), Path(current_parent_dir, "_attachments/files/"), dirs_exist_ok=True) 
+            except:
+                print(f"something failed: shutil.copytree files {temppath_dir} {current_parent_dir}")
+            try:
+                shutil.copytree(Path(tempdir_path, "images"), Path(current_parent_dir, "_attachments/images/"), dirs_exist_ok=True) 
+            except:
+                print(f"something failed: shutil.copytree images {temppath_dir} {current_parent_dir}")
             if args.verbose:
                 print("[*] Conversion of " + str(ctd_file) + " finished!")
 
