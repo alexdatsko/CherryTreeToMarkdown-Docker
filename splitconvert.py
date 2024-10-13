@@ -19,7 +19,7 @@ def split_ctd_recursively(current_node, parent_path, indent=0):
     # We have child nodes, i.e. we're a "directory" in Markdown terms.
     if len(child_nodes) > 0:
         try:
-            node_name = sanitize_filepath(str(current_node.xpath('@name')[0]))
+            node_name = sanitize_filepath(str(current_node.xpath('@name')[0]).replace('/',"_").replace(' ','_'))
             parent_path = Path(parent_path, node_name)
         except:
             pass

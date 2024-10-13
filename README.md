@@ -1,5 +1,12 @@
 # Docker Wrapper for CherryTreeToMarkdown
 
+## Update 10-13-2024 Alex Datsko:
+
+- Added in original php repo
+- Also: added support for src/element/Node.php for errors, so a very large .CTD with errors will still continue the conversion and print the errored nodes to the screen.
+
+### Original README:
+
 This is a quick and dirty Docker wrapper for [CherryTreeToMarkdown](https://gitlab.com/kibley/cherrytreetomarkdown).
 It allows you to convert your CherryTree files to Markdown without installing all the dependencies on your host.
 
