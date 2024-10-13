@@ -24,23 +24,16 @@ $ docker build -t cherry2md .
 ~~~
 
 ## Usage: One large .MD file
-## Kibley script: 11-04-2021
+### Kibley script: 11-04-2021
 
 ~~~ bash
-$ ls -alh input/
-total 272K
-drwxr-xr-x 2 user user 4.0K Jul 25 14:58 .
-drwxr-xr-x 4 user user 4.0K Jul 25 15:01 ..
--rw-r--r-- 1 user user 264K Jul 25 14:58 MyCherryTreeNotes.ctd
 
-$ ls -alh output/
-total 168K
-drwxr-xr-x 4 user user 4.0K Jul 25 14:58 .
-drwxr-xr-x 4 user user 4.0K Jul 25 15:01 ..
-
-$ docker run --rm -it --name cherry2md -v "${PWD}/input:/in" -v "${PWD}/output:/out" cherry2md
+$ mkdir out
+$ docker run --rm -it --name cherry2md -v "${PWD}:/in" -v "${PWD}/out:/out" cherry2md
 
 root@76eaa5863875:~/cherrytreetomarkdown# php cherrytomd.php /in/MyCherryTreeNotes.ctd /out
+[..]
+root@76eaa5863875:~/cherrytreetomarkdown# exit
 
 $ ls -alh out/
 total 168K
@@ -52,12 +45,16 @@ drwxr-xr-x 2 root root 4.0K Jul 25 15:11 images
 ~~~
 
 ## Usage: Many .MD files:
-## ret2src script : 07-28-2023
+### ret2src script : 07-28-2023
 
-This will instead create a new MD file for each node which is MUCH better for large CTD files, in converting your Cherrytree knowledgebase to be used with Obsidian, etc:
+This will instead create a new MD file for each node which is MUCH better for large CTD files, in converting your Cherrytree knowledgebase to be used with Obsidian or the like.
+The docker is started the same way as above.
 
 ~~~
-root@a32456004b2f:~/cherrytreetomarkdown# ./splitconvert.py -i /in -o /out
+$ mkdir out
+$ docker run --rm -it --name cherry2md -v "${PWD}:/in" -v "${PWD}/out:/out" cherry2md
+
+root@a32456004b2f:~/cherrytreetomarkdown# ./splitconvert.py -i /in/filename.ctd -o /out
 [*] Starting node to individual file conversion.
 [*] Node to file conversion: All done.
 [*] Starting XML to Markdown conversion.
