@@ -1,4 +1,6 @@
-# Docker Wrapper for CherryTreeToMarkdown
+# CherryTreeToMarkdown-Docker
+
+A docker container to convert your Cherrytree file to one, or many .MD files.  These tools were built by Kibley and ret2src, but I have made slight modifications/fixes and added a couple small scripts to simplify.
 
 ## Update 10-13-2024 Alex Datsko:
 
