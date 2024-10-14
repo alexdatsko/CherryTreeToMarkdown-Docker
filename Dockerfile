@@ -14,17 +14,18 @@ RUN echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" | tee /etc
 
 RUN cd /root \
  && git clone https://github.com/alexdatsko/CherryTreeToMarkdown-Docker.git \
- && cd /root/cherrytreetomarkdown/ \
+ && cd /root/CherryTreeToMarkdown-Docker \
  && php composer.phar install
 
-COPY splitconvert.py /root/cherrytreetomarkdown/splitconvert.py
-COPY requirements.txt /root/cherrytreetomarkdown/requirements.txt
+COPY splitconvert.py /root/CherryTreeToMarkdown-Docker/splitconvert.py
+COPY requirements.txt /root/CherryTreeToMarkdown-Docker/requirements.txt
 RUN apt install -y python3-pip \
- && cd /root/cherrytreetomarkdown \
+ && cd /root/CherryTreeToMarkdown-Docker \
  && pip install -r requirements.txt --break-system-packages
 
 VOLUME /out
 VOLUME /in
-WORKDIR /root/cherrytreetomarkdown
+WORKDIR /root/CherryTreeToMarkdown-Docker
+RUN chmod +x /root/CherryTreeToMarkdown-Docker/splitconvert.py
 
 ENTRYPOINT bash

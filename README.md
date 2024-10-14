@@ -4,7 +4,8 @@
 
 - Added in original php repo for converting to one large file, both options can run in the same docker.
 - Also: added support for src/element/Node.php for errors, so a very large .CTD with errors will still continue the conversion and print the errored nodes to the screen.
-- Shortened the paths you need to type in the docker exec, no reason for these long paths IMO
+- Shortened the paths you need to type in the docker exec, no reason for these long paths IMO, /in (in the container) is the dir you run from, and out/ is the output dir (/out in container)
+- Added bash script 'dockerbuild' to build the docker container
 - Added bash script 'dockerrun' to launch the docker container
 
 Note: If your cherrytree file is an SQLite type (.ctb) and/or password-protected, you will need to save it as a non-password protected XML instead first (.ctd).
@@ -21,14 +22,15 @@ The second (Python) script will create many directories and convert every node i
 ~~~ bash
 $ git clone https://github.com/ret2src/CherryTreeToMarkdown-Docker
 $ cd CherryTreeToMarkdown-Docker
-$ docker build -t cherry2md .
+$ ./dockerbuild
 ~~~
 
 ## Usage: One large .MD file
 ### Kibley script: 11-04-2021
 
-~~~ bash
+To run:
 
+~~~ bash
 $ ./dockerrun
 
 root@76eaa5863875:~/cherrytreetomarkdown# php cherrytomd.php /in/MyCherryTreeNotes.ctd /out
@@ -44,14 +46,13 @@ drwxr-xr-x 2 root root 4.0K Jul 25 15:11 images
 -rw-r--r-- 1 root root 151K Jul 25 15:11 index.md
 ~~~
 
-## Usage: Many .MD files:
+## Usage: 1 .MD file per node:
 ### ret2src script : 07-28-2023
 
 This will instead create a new MD file for each node which is MUCH better for large CTD files, in converting your Cherrytree knowledgebase to be used with Obsidian or the like.
 The docker is started the same way as above.
 
 ~~~ bash
-
 $ ./dockerrun
 
 root@a32456004b2f:~/cherrytreetomarkdown# python3 splitconvert.py -i /in/filename.ctd -o /out
